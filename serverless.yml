@@ -62,10 +62,14 @@ functions:
 #    The following are a few example events you can configure
 #    NOTE: Please make sure to change your handler code to work with those events
 #    Check the event documentation for details
-#    events:
-#      - http:
-#          path: users/create
-#          method: get
+
+    # イベントにAPIGatewayを設定
+    events:
+      - http:
+          path: hello
+          method: get
+#          authorizer: aws_iam #IAMでのアクセス制御を追加
+
 #      - s3: ${env:BUCKET}
 #      - schedule: rate(10 minutes)
 #      - sns: greeter-topic

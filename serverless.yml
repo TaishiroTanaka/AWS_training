@@ -97,8 +97,31 @@ functions:
 #      variable2: value2
 
 # you can add CloudFormation resource templates here
-#resources:
-#  Resources:
+# リソースの構築
+resources:
+  Resources:
+    # DynamoDBの構築
+    serviceTable:
+      Type: 'AWS::DynamoDB::Table'
+      Properties:
+        # キーの型を指定
+        AttributeDefinitions:
+        - AttributeName: service_id
+          AttributeType: N
+#        - AttributeName: name
+#          AttributeType: S
+        # キーの種類を指定（ハッシュorレンジキー）
+        KeySchema:
+        - AttributeName: service_id
+          KeyType: HASH
+#        - AttributeName: name
+#          KeyType: RANGE
+        # プロビジョニングするキャパシティーユニットの設定
+        ProvisionedThroughput:
+          ReadCapacityUnits: 1
+          WriteCapacityUnits: 1
+        # テーブル名の指定
+        TableName: ServiceOfAws
 #    NewResource:
 #      Type: AWS::S3::Bucket
 #      Properties:

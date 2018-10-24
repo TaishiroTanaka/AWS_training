@@ -27,7 +27,17 @@ provider:
 #  region: us-east-1
 
 # you can add statements to the Lambda function's IAM Role here
-#  iamRoleStatements:
+  iamRoleStatements:
+    - Effect: "Allow"
+      Action:
+        - dynamodb:DescribeTable
+        - dynamodb:Query
+        - dynamodb:Scan
+        - dynamodb:GetItem
+        - dynamodb:PutItem
+        - dynamodb:UpdateItem
+        - dynamodb:DeleteItem
+      Resource: "arn:aws:dynamodb:ap-northeast-1:*:*"
 #    - Effect: "Allow"
 #      Action:
 #        - "s3:ListBucket"
@@ -56,8 +66,9 @@ provider:
 #    - exclude-me-dir/**
 
 functions:
-  hello:
-    handler: handler.hello
+  register-humou-word:
+    handler: app/api_humou.register_humou_word_handler
+    name: register-humou-word
 
 #    The following are a few example events you can configure
 #    NOTE: Please make sure to change your handler code to work with those events
@@ -66,8 +77,8 @@ functions:
     # イベントにAPIGatewayを設定
     events:
       - http:
-          path: hello
-          method: get
+          path: word/
+          method: POST
 #          authorizer: aws_iam #IAMでのアクセス制御を追加
 
 #      - s3: ${env:BUCKET}
@@ -101,18 +112,18 @@ functions:
 resources:
   Resources:
     # DynamoDBの構築
-    serviceTable:
+    humouTable:
       Type: 'AWS::DynamoDB::Table'
       Properties:
         # キーの型を指定
         AttributeDefinitions:
-        - AttributeName: service_id
+        - AttributeName: word_id
           AttributeType: N
 #        - AttributeName: name
 #          AttributeType: S
         # キーの種類を指定（ハッシュorレンジキー）
         KeySchema:
-        - AttributeName: service_id
+        - AttributeName: word_id
           KeyType: HASH
 #        - AttributeName: name
 #          KeyType: RANGE
@@ -121,7 +132,7 @@ resources:
           ReadCapacityUnits: 1
           WriteCapacityUnits: 1
         # テーブル名の指定
-        TableName: ServiceOfAws
+        TableName: HumouWord
 #    NewResource:
 #      Type: AWS::S3::Bucket
 #      Properties:

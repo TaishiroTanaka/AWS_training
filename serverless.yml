@@ -79,6 +79,13 @@ functions:
       - http:
           path: word/
           method: POST
+  get-humou:
+    handler: app/api_humou.get_humou_handler
+    name: get-humou
+    events:
+    - http:
+        path: humou/
+        method: GET
 #          authorizer: aws_iam #IAMでのアクセス制御を追加
 
 #      - s3: ${env:BUCKET}

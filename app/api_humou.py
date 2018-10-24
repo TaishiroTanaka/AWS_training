@@ -4,6 +4,7 @@ from decimal import Decimal
 from lib.domain.model.humouword_factory import HumouWordFactory
 from app.infrastructure.humouword import HumouWordDataSource
 from app.application.humouword import HumouWordRegisterService
+from app.application.humouword import GetHumouService
 
 
 def register_humou_word_handler(event, context):
@@ -25,6 +26,18 @@ def register_humou_word_handler(event, context):
             "message": "HumouWord Create Request failure!",
         }
         return create_response(500, body)
+
+
+def get_humou_handler(event, context):
+    humou_word_datasource = HumouWordDataSource()
+    get_humou_service = GetHumouService(humou_word_datasource)
+    result = get_humou_service.get()
+
+    body = {
+        "message": "Get Humou Request successfully!",
+        "humou": result
+    }
+    return create_response(200, body)
 
 
 def create_response(status_code, body):

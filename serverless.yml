@@ -79,6 +79,13 @@ functions:
       - http:
           path: word/
           method: POST
+  find-humou-word:
+    handler: app/api_humou.find_humou_word_handler
+    name: find-humou-word
+    events:
+    - http:
+        path: word/
+        method: GET
   get-humou:
     handler: app/api_humou.get_humou_handler
     name: get-humou

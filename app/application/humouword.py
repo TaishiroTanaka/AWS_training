@@ -13,6 +13,15 @@ class HumouWordRegisterService:
         return True
 
 
+class HumouWordGetService:
+    def __init__(self, humou_word_datasource: HumouWordDataSource) -> None:
+        self.humou_word_datasource = humou_word_datasource
+
+    def find_all(self) -> list:
+        humou_word_list = self.humou_word_datasource.find_all()
+        return humou_word_list
+
+
 class GetHumouService:
     def __init__(self, humou_word_datasource: HumouWordDataSource) -> None:
         self.humou_word_datasource = humou_word_datasource

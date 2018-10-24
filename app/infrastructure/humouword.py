@@ -42,7 +42,7 @@ class HumouWordDataSource:
 
         humou_word_list = []
         for result in results['Items']:
-            todo = HumouWord.from_dict(result)
-            humou_word_list.append(todo)
+            humou_word = HumouWord.from_dict(result)
+            humou_word_list.append(humou_word)
 
         return humou_word_list

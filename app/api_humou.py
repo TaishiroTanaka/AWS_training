@@ -4,6 +4,7 @@ from decimal import Decimal
 from lib.domain.model.humouword_factory import HumouWordFactory
 from app.infrastructure.humouword import HumouWordDataSource
 from app.application.humouword import HumouWordRegisterService
+from app.application.humouword import HumouWordGetService
 from app.application.humouword import GetHumouService
 
 
@@ -26,6 +27,23 @@ def register_humou_word_handler(event, context):
             "message": "HumouWord Create Request failure!",
         }
         return create_response(500, body)
+
+
+def find_humou_word_handler(event, context):
+    humou_word_datasource = HumouWordDataSource()
+    humou_word_register_service = HumouWordGetService(humou_word_datasource)
+    results = humou_word_register_service.find_all()
+
+    humou_word_dict_list = []
+    for result in results:
+        humou_word_dict = result.to_dict()
+        humou_word_dict_list.append(humou_word_dict)
+
+    body = {
+        "message": "Get HumouWord Request successfully!",
+        "humou_word_list": humou_word_dict_list
+    }
+    return create_response(200, body)
 
 
 def get_humou_handler(event, context):

@@ -91,7 +91,7 @@ functions:
     name: delete-humou-word
     events:
     - http:
-        path: word/
+        path: word/{wordId}
         method: DELETE
   get-humou:
     handler: app/api_humou.get_humou_handler

@@ -12,16 +12,22 @@ from app.application.humouword import GetHumouService
 
 def register_humou_word_handler(event, context):
     params = json.loads(event['body'])
-    humou_word = HumouWordFactory.create(params)
-
     humou_word_datasource = HumouWordDataSource()
     humou_word_register_service = HumouWordRegisterService(humou_word_datasource)
-    result = humou_word_register_service.register(humou_word)
+
+    result = True
+    humou_word_list = []
+    for param in params:
+        humou_word = HumouWordFactory.create(param)
+        ret = humou_word_register_service.register(humou_word)
+        humou_word_list.append(humou_word.to_dict())
+        if not ret:
+            result = False
 
     if result is True:
         body = {
             "message": "HumouWord Create Request successfully!",
-            "word_id": humou_word.word_id.value
+            "humou_word_list": humou_word_list
         }
         return create_response(200, body)
     else:
@@ -49,18 +55,13 @@ def find_humou_word_handler(event, context):
 
 
 def delete_humou_word_handler(event, context):
-    params = json.loads(event['body'])
     humou_word_datasource = HumouWordDataSource()
     humou_word_get_service = HumouWordGetService(humou_word_datasource)
     humou_word_delete_service = HumouWordDeleteService(humou_word_datasource)
 
-    humou_word_list =[]
-    for param in params:
-        word_id = WordId(param['word_id'])
-        hummou_word = humou_word_get_service.find_by_id(word_id)
-        humou_word_list.append(hummou_word)
-
-    result = humou_word_delete_service.delete_multi(humou_word_list)
+    word_id = WordId(int(event['pathParameters']['wordId']))
+    humou_word = humou_word_get_service.find_by_id(word_id)
+    result = humou_word_delete_service.delete(humou_word)
 
     if result is True:
         body = {

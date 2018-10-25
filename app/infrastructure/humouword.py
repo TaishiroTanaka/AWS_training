@@ -20,7 +20,7 @@ class HumouWordDataSource:
         humou_word_table_name = 'HumouWord'
         humou_word_table = self.datasource.Table(humou_word_table_name)
         humou_word_dict = DataSource.dynamo_type_encode(humou_word.to_dict())
-        humou_word_table.delete_item(hash_key={'word_id': humou_word_dict['word_id']})
+        humou_word_table.delete_item(Key={'word_id': humou_word_dict['word_id']})
 
     def get_top_word_random(self) -> HumouWord:
         humou_word_list = self.find_all()
@@ -57,7 +57,7 @@ class HumouWordDataSource:
     def find_by_id(self, word_id: WordId) -> HumouWord:
         humou_word_table_name = 'HumouWord'
         humou_word_table = self.datasource.Table(humou_word_table_name)
-        result = humou_word_table.get_item(hash_key={'word_id': word_id.value})
+        result = humou_word_table.get_item(Key={'word_id': word_id.value})
         item = result['Item']
         humou_word = HumouWord.from_dict(item)
 

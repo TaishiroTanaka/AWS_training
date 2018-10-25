@@ -2,9 +2,11 @@ import json
 from decimal import Decimal
 
 from lib.domain.model.humouword_factory import HumouWordFactory
+from lib.domain.model.humouword import WordId
 from app.infrastructure.humouword import HumouWordDataSource
 from app.application.humouword import HumouWordRegisterService
 from app.application.humouword import HumouWordGetService
+from app.application.humouword import HumouWordDeleteService
 from app.application.humouword import GetHumouService
 
 
@@ -44,6 +46,32 @@ def find_humou_word_handler(event, context):
         "humou_word_list": humou_word_dict_list
     }
     return create_response(200, body)
+
+
+def delete_humou_word_handler(event, context):
+    params = json.loads(event['body'])
+    humou_word_datasource = HumouWordDataSource()
+    humou_word_get_service = HumouWordGetService(humou_word_datasource)
+    humou_word_delete_service = HumouWordDeleteService(humou_word_datasource)
+
+    humou_word_list =[]
+    for param in params:
+        word_id = WordId(param['word_id'])
+        hummou_word = humou_word_get_service.find_by_id(word_id)
+        humou_word_list.append(hummou_word)
+
+    result = humou_word_delete_service.delete_multi(humou_word_list)
+
+    if result is True:
+        body = {
+            "message": "HumouWord Delete Request successfully!",
+        }
+        return create_response(200, body)
+    else:
+        body = {
+            "message": "HumouWord Delete Request failure!",
+        }
+        return create_response(500, body)
 
 
 def get_humou_handler(event, context):

@@ -86,6 +86,13 @@ functions:
     - http:
         path: word/
         method: GET
+  delete-humou-word:
+    handler: app/api_humou.delete_humou_word_handler
+    name: delete-humou-word
+    events:
+    - http:
+        path: word/
+        method: DELETE
   get-humou:
     handler: app/api_humou.get_humou_handler
     name: get-humou
